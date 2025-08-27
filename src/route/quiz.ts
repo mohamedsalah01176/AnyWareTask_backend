@@ -9,7 +9,7 @@ const quizService= new QuizService();
 const quizControler= new QuizControler(quizService)
 
 
-router.get("/quiz",authorizationForTeacher,(req,res)=>quizControler.getAllQuiz(req,res))
+router.get("/quiz",(req,res)=>quizControler.getAllQuiz(req,res))
 router.post("/quiz",authorizationForTeacher,(req,res)=>quizControler.addQuiz(req,res))
 router.post("/quiz/:quizId",authorizationForTeacher,(req,res)=>quizControler.submitQuiz(req,res))
 router.patch("/quiz/:quizId",(req,res)=>quizControler.updateQuize(req,res))
