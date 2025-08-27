@@ -1,50 +1,42 @@
-📌 API Endpoints
-🔑 Authentication
+## 📌 API Endpoints
 
-POST /register → Register a new user
+### 🔑 Authentication
+- **POST** `/register` → Register a new user
+- **POST** `/login` → Login user
 
-POST /login → Login user
+---
 
-📢 Announcements
+### 📢 Announcements
+- **GET** `/announcement` → Get all announcements _(auth required)_
+- **POST** `/announcement` → Add announcement _(teacher only)_
+- **PATCH** `/announcement/:id` → Update announcement _(teacher only)_
+- **DELETE** `/announcement/:id` → Delete announcement _(teacher only)_
 
-GET /announcement → Get all announcements (auth required)
+---
 
-POST /announcement → Add announcement (teacher only)
+### 🎓 Courses
+- **GET** `/course` → Get all courses _(auth required)_
+- **DELETE** `/course/:id` → Delete course _(teacher only)_
 
-PATCH /announcement/:id → Update announcement (teacher only)
+---
 
-DELETE /announcement/:id → Delete announcement (teacher only)
+### 📝 Quizzes
+- **GET** `/quiz` → Get all quizzes _(auth required)_
+- **POST** `/quiz` → Create quiz _(teacher only)_
+- **PATCH** `/quiz/:quizId` → Update quiz _(teacher only)_
+- **DELETE** `/quiz/:quizId` → Delete quiz _(teacher only)_
+- **POST** `/quiz/:quizId/submit` → Submit quiz _(student)_
+- **GET** `/submitQuiz` → Get all submitted quizzes _(teacher only)_
 
-🎓 Courses
+---
 
-GET /course → Get all courses (auth required)
+### 👤 Users
+- **DELETE** `/user/:id` → Delete user _(admin/teacher)_
 
-DELETE /course/:id → Delete course (teacher only)
+---
 
-📝 Quizzes
-
-GET /quiz → Get all quizzes (auth required)
-
-POST /quiz → Create quiz (teacher only)
-
-PATCH /quiz/:quizId → Update quiz (teacher only)
-
-DELETE /quiz/:quizId → Delete quiz (teacher only)
-
-POST /quiz/:quizId/submit → Submit quiz (student)
-
-GET /submitQuiz → Get all submitted quizzes (teacher only)
-
-👤 Users
-
-DELETE /user/:id → Delete user (admin/teacher)
-
-👨‍💻 Technologies
-
-Node.js
-
-Express.js
-
-MongoDB + Mongoose
-
-JWT Authentication
+## 👨‍💻 Technologies
+- Node.js  
+- Express.js  
+- MongoDB + Mongoose  
+- JWT Authentication  
