@@ -10,7 +10,7 @@ const userControler= new UserControler(userService)
 
 router.post("/register",(req,res)=>userControler.register(req,res))
 router.post("/login",(req,res)=>userControler.login(req,res))
-router.delete("/login",(req,res)=>userControler.deleteUser(req,res))
+router.delete("/user",(req,res)=>userControler.deleteUser(req,res))
 
 
 
