@@ -1,0 +1,53 @@
+import  jwt, { JwtPayload }  from 'jsonwebtoken';
+import { NextFunction, Request, Response } from "express";
+
+declare global {
+  namespace Express {
+    interface Request {
+      user?: string | JwtPayload; // أو حط النوع الصحيح حسب محتوى التوكن
+    }
+  }
+}
+
+
+export const authentication =(req:Request,res:Response,next:NextFunction)=>{
+  const authHeader  =req.headers["Authorization"] as string || req.headers["authorization"] as string;
+  if(!authHeader || !authHeader.startsWith("Bearer")){
+    return res.status(505).json({message:"No token Providede"})
+  }
+  
+  const token=authHeader.split(" ")[1];
+  
+  
+  try{
+    const decoded = jwt.verify(token, process.env.SECTERTOKENKEY as string) as JwtPayload;
+    console.log(decoded)
+    req.user = decoded;
+    next()
+  }catch (error) {
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+  
+}
+
+
+export const authorizationForTeacher=(req:Request,res:Response,next:NextFunction)=>{
+  const authHearder= req.headers["Authorization"] as string || req.headers["authorization"] as string
+  if(!authHearder || !authHearder.startsWith("Bearer")){
+    return res.status(505).json({message:"No token Providede"})
+  } 
+  let token = authHearder.split(" ")[1];
+  try{
+    const decoded =jwt.verify(token,process.env.SECTERTOKENKEY as string) as JwtPayload
+    console.log(decoded)
+    if(decoded.role == "teacher"){
+      req.user = decoded;
+      next();
+    }else{
+      return res.status(403).json({ message: "Access denied. Only hosts are allowed." });
+    }
+  }catch(error){
+    return res.status(401).json({ message: "Invalid or expired token" });
+  }
+}
+

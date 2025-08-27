@@ -1,0 +1,13 @@
+# Ignore environment files
+.env
+Auth.txt
+
+# Ignore log files
+*.log
+
+# Ignore node modules
+node_modules/
+
+# Ignore build files
+# dist/
+build/
