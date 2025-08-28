@@ -5,6 +5,14 @@ export const translateToEn = async (body: IQuiz): Promise<IQuiz> => {
   const translated: IQuiz = JSON.parse(JSON.stringify(body));
 
   try {
+    if (body.title) {
+      translated.titleAr = body.title;
+      translated.titleEn = await translate(body.title, { from: "ar", to: "en" });
+    }
+    if (body.description) {
+      translated.descriptionAr = body.description;
+      translated.descriptionEn = await translate(body.description, { from: "ar", to: "en" });
+    }
     if (body.course) {
       translated.course.titleAr = body.course.title;
       translated.course.titleEn = await translate(body.course.title, { from: "ar", to: "en" });

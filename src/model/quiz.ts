@@ -40,6 +40,30 @@ const QuestionSchema = new mongoose.Schema({
 
 const QuizSchema = new mongoose.Schema(
   {
+    title: {
+      type: String,
+      required: [true, "Title is required"],
+      minlength: [3, "Title must be at least 3 characters long"],
+      maxlength: [40, "Title must not exceed 0 characters"],
+    },
+    titleEn: {
+      type: String,
+    },
+    titleAr: {
+      type: String,
+    },
+    description: {
+      type: String,
+      required: [true, "description is required"],
+      minlength: [3, "description must be at least 3 characters long"],
+      maxlength: [500, "description must not exceed 500 characters"],
+    },
+    descriptionEn: {
+      type: String,
+    },
+    descriptionAr: {
+      type: String,
+    },
     course: {
       type: CourseSchema,
       required: [true, "Course information is required"],
