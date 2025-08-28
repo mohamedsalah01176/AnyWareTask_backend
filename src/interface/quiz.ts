@@ -24,6 +24,12 @@ export interface IScore {
 
 export interface IQuiz {
   course: ICourse; 
+  title: string,
+  titleEn: string,
+  titleAr: string,
+  description: string,
+  descriptionEn: string,
+  descriptionAr: string,
   questions: IQuestion[];
   teacherId: Types.ObjectId;
   numberStudent: number;
