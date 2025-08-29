@@ -11,7 +11,7 @@ export const regiterBodySchema=yup.object({
 
 
 export const loginBodySchema=yup.object({
-  emailOrPhone:yup.string().test("email-or-phone","Invalid Phone Number Or Email",(value)=>testFunction(value as string)).required('Email is required Or Phone'),
+  email:yup.string().test("email","Invalid Email",(value)=>testFunction(value as string)).required('Email is required'),
   password:yup.string().matches(/^(?=.*[a-zA-Z])(?=.*\d)/,'Password must contain at least one letter and one number').required('Password is required'),
 })
 

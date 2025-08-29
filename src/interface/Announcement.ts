@@ -8,7 +8,7 @@ export interface IAnnouncement {
   messageEn?: string;  
   messageAr?: string;    
   createdBy?: string; 
-  expiresAt: Date;  
+  expiresAt?: Date;  
   createdAt?: Date;
   updatedAt?: Date;
 }

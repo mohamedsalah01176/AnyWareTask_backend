@@ -28,6 +28,7 @@ export default class AnnouncementService{
   }
 
   async handleAddAnnouncement(body: IAnnouncement, lang: string) {
+    console.log(body)
     try {
       let translateBody;
 

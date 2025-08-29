@@ -19,13 +19,12 @@ export default class UserService{
       if(foundUser){
         return{
           status:"fail",
-          messageEn:"The Email Or Phone Aready Registered",
-          messageAr:"تم تسجيل الايميل او الفون من قبل",
+          messageEn:"The Email Aready Registered",
+          messageAr:"تم تسجيل الايميل من قبل",
         }
       }
       
       const validationBody=regiterBodySchema.validate(body,{abortEarly:false});
-      console.log((await validationBody).password as string)
       let bcriptPassword=await bcrypt.hash((await validationBody).password as string ,parseInt(process.env.SALTPASSWORD as string));
       let newUser=new UserModel({...(await validationBody),password:bcriptPassword});
       await newUser.save();
@@ -33,6 +32,7 @@ export default class UserService{
         _id: newUser._id,
         name:newUser.name,
         email: newUser.email,
+        teacherId:newUser.teacherId,
         role: newUser.role,
         createdAt:newUser.createdAt
       };
@@ -44,6 +44,7 @@ export default class UserService{
         token
       }
     }catch(errors){
+      console.log(errors)
       return {
         status:"error",
         errors
@@ -61,17 +62,12 @@ export default class UserService{
     }
     try{
       let validateBody=await loginBodySchema.validate(body,{abortEarly:false});
-      let foundUser:IUserBody | null;
-      if(validateBody.emailOrPhone.startsWith("+")){
-        foundUser=await UserModel.findOne({phone:validateBody.emailOrPhone});
-      }else{
-        foundUser=await UserModel.findOne({email:validateBody.emailOrPhone});
-      }
+      const foundUser=await UserModel.findOne({email:validateBody.email});
       console.log(foundUser)
       if(!foundUser){
         return{
           status:"fail",
-          messageEn:"Email Or Phone Not Registered",
+          messageEn:"Email Not Registered",
           messageAr:"الايميل غير مسجل"
         }
       }
@@ -80,6 +76,8 @@ export default class UserService{
         _id: foundUser._id,
         name:foundUser.name,
         email: foundUser.email,
+        teacherId:foundUser.teacherId,
+        role:foundUser.role,
         createdAt:foundUser.createdAt
       };
       let token=  jwt.sign(payload,process.env.SECTERTOKENKEY as string,{expiresIn:"30d"});
@@ -134,6 +132,36 @@ export default class UserService{
       return{
           status:"success",
           users
+        }
+    }catch(errors){
+      console.log(errors)
+      return{
+        status:"error",
+        errors
+      }
+    }
+  }
+  async handleGetAllTeachersId(){
+    try{
+      const teacherId = await UserModel.find({ role: "teacher" }).select("teacherId -_id");
+      return{
+          status:"success",
+          teacherId
+        }
+    }catch(errors){
+      console.log(errors)
+      return{
+        status:"error",
+        errors
+      }
+    }
+  }
+  async handleGetAllStudentForTeacher(teacherId:string){
+    try{
+      const usersId=await UserModel.find({role:"student",teacherId:teacherId});
+      return{
+          status:"success",
+          usersId
         }
     }catch(errors){
       console.log(errors)

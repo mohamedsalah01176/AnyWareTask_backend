@@ -6,7 +6,7 @@ export const CourseSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Course title is required"],
-      minlength: [3, "Course title must be at least 3 characters long"],
+      minlength: [1, "Course title must be at least 3 characters long"],
       maxlength: [200, "Course title must not exceed 200 characters"],
     },
     titleEn: {
@@ -18,7 +18,7 @@ export const CourseSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "Course description is required"],
-      minlength: [10, "Description must be at least 10 characters long"],
+      minlength: [1, "Description must be at least 10 characters long"],
       maxlength: [2000, "Description must not exceed 2000 characters"],
     },
     descriptionEn: {
@@ -29,7 +29,6 @@ export const CourseSchema = new mongoose.Schema(
     },
     numberQuiz: {
       type: Number,
-      required: [true, "Number of quizzes is required"],
       min: [0, "Number of quizzes cannot be negative"],
       default: 0,
     },

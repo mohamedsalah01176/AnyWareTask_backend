@@ -12,8 +12,8 @@ const snnouncementControler= new AnnouncementControler(announcementService)
 
 router.get("/announcement",authentication,(req,res)=>snnouncementControler.getAllAnnouncements(req,res))
 router.post("/announcement",authorizationForTeacher,(req,res)=>snnouncementControler.addAnnouncements(req,res))
-router.patch("/announcement",authorizationForTeacher,(req,res)=>snnouncementControler.updateAnnouncements(req,res))
-router.delete("/announcement",authorizationForTeacher,(req,res)=>snnouncementControler.deleteAnnouncements(req,res))
+router.patch("/announcement/:announcementId",authorizationForTeacher,(req,res)=>snnouncementControler.updateAnnouncements(req,res))
+router.delete("/announcement/:announcementId",authorizationForTeacher,(req,res)=>snnouncementControler.deleteAnnouncements(req,res))
 
 
 

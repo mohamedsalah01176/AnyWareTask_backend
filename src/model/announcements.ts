@@ -41,7 +41,6 @@ const AnnouncementSchema = new mongoose.Schema(
     },
     expiresAt: {
       type: Date,
-      required: [true, "Expire Date is required"],
       validate: {
         validator: function (value: Date) {
           return value > new Date();

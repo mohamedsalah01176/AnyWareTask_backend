@@ -1,5 +1,6 @@
 import  jwt, { JwtPayload }  from 'jsonwebtoken';
 import { NextFunction, Request, Response } from "express";
+import { IUserBody } from '../interface/user';
 
 declare global {
   namespace Express {
@@ -17,10 +18,10 @@ export const authentication =(req:Request,res:Response,next:NextFunction)=>{
   }
   
   const token=authHeader.split(" ")[1];
-  
+  console.log("ssssssss")
   
   try{
-    const decoded = jwt.verify(token, process.env.SECTERTOKENKEY as string) as JwtPayload;
+    const decoded = jwt.verify(token, process.env.SECTERTOKENKEY as string) as IUserBody;
     console.log(decoded)
     req.user = decoded;
     next()
@@ -37,14 +38,15 @@ export const authorizationForTeacher=(req:Request,res:Response,next:NextFunction
     return res.status(505).json({message:"No token Providede"})
   } 
   let token = authHearder.split(" ")[1];
+  console.log(token)
   try{
-    const decoded =jwt.verify(token,process.env.SECTERTOKENKEY as string) as JwtPayload
+    const decoded =jwt.verify(token,process.env.SECTERTOKENKEY as string) as IUserBody;
     console.log(decoded)
     if(decoded.role == "teacher"){
       req.user = decoded;
       next();
     }else{
-      return res.status(403).json({ message: "Access denied. Only hosts are allowed." });
+      return res.status(403).json({ message: "Access denied. Only teacher are allowed." });
     }
   }catch(error){
     return res.status(401).json({ message: "Invalid or expired token" });
