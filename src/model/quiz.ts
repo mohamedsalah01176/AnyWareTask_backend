@@ -1,7 +1,32 @@
 import mongoose from "mongoose";
-import { UserSchema } from "./user";
 import { IQuiz } from "../interface/quiz";
 import { CourseSchema } from "./course";
+
+
+
+const StudentSubSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      minlength: 3,
+    },
+    teacherId: {
+      type: String,
+    },
+    role: {
+      type: String,
+      enum: ["teacher", "student"],
+      default: "student",
+    },
+    email: {
+      type: String,
+      match: [/^\S+@\S+\.\S+$/, "Invalid email format"],
+    },
+  },
+  { _id: false } 
+);
+
+
 
 const QuestionSchema = new mongoose.Schema({
   question: {
@@ -43,7 +68,7 @@ const QuizSchema = new mongoose.Schema(
     title: {
       type: String,
       required: [true, "Title is required"],
-      minlength: [3, "Title must be at least 3 characters long"],
+      minlength: [1, "Title must be at least 3 characters long"],
       maxlength: [40, "Title must not exceed 0 characters"],
     },
     titleEn: {
@@ -55,7 +80,7 @@ const QuizSchema = new mongoose.Schema(
     description: {
       type: String,
       required: [true, "description is required"],
-      minlength: [3, "description must be at least 3 characters long"],
+      minlength: [1, "description must be at least 3 characters long"],
       maxlength: [500, "description must not exceed 500 characters"],
     },
     descriptionEn: {
@@ -67,6 +92,10 @@ const QuizSchema = new mongoose.Schema(
     course: {
       type: CourseSchema,
       required: [true, "Course information is required"],
+    },
+    teacherId: {
+      type:String,
+      required: true 
     },
     questions: {
       type: [QuestionSchema],
@@ -85,12 +114,11 @@ const QuizSchema = new mongoose.Schema(
     scores: [
       {
         student: {
-          type: UserSchema,
-          required: [true, "Student is required for score entry"],
+          type: StudentSubSchema,
+          index: false,
         },
         score: {
           type: Number,
-          required: [true, "Score is required"],
           min: [0, "Score cannot be less than 0"],
           max: [100, "Score cannot exceed 100"], 
         },

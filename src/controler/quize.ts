@@ -16,6 +16,11 @@ export default class QuizControler{
     let responseServer=await this.quizService.handleGetAllQuizzes();
     ReponseStatues(responseServer,res)
   }
+  async getSpecificQuiz(req:Request,res:Response){
+    const quizId=req.params.quizId
+    let responseServer=await this.quizService.handleGetSpecificQuizz(quizId);
+    ReponseStatues(responseServer,res)
+  }
   async getAllSubmitedQuiz(req:Request,res:Response){
     let responseServer=await this.quizService.handleGetAllSubmitedQuizzes();
     ReponseStatues(responseServer,res)
@@ -24,7 +29,8 @@ export default class QuizControler{
   async addQuiz(req:Request,res:Response){
     const body=req.body;
     const lang=req.query.lang as string;
-    let responseServer=await this.quizService.handleAddQuiz(body,lang);
+    const user=req.user as IUserBody;
+    let responseServer=await this.quizService.handleAddQuiz(body,lang,user);
     ReponseStatues(responseServer,res)
   }
   async submitQuiz(req:Request,res:Response){
@@ -45,6 +51,11 @@ export default class QuizControler{
   async deleteCourse(req:Request,res:Response){
     const quizId=req.params.quizId
     let responseServer=await this.quizService.handleDeleteQuiz(quizId);
+    ReponseStatues(responseServer,res)
+  }
+  async quizzesForUsers(req:Request,res:Response){
+    const user=req.user as IUserBody;
+    let responseServer=await this.quizService.handleAllQuizForUsers(user.teacherId as string);
     ReponseStatues(responseServer,res)
   }
 

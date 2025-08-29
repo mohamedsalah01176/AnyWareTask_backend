@@ -10,7 +10,7 @@ const courseControler= new CourseControler(courseService)
 
 
 router.get("/course",authentication,(req,res)=>courseControler.getAllCourses(req,res))
-router.delete("/course",authorizationForTeacher,(req,res)=>courseControler.deleteCourse(req,res))
+router.delete("/course/:courseId",authorizationForTeacher,(req,res)=>courseControler.deleteCourse(req,res))
 
 
 

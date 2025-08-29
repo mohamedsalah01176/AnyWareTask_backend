@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
 import { IUser } from "../interface/user";
 
+
 export const UserSchema=new mongoose.Schema({
   name:{
     type:String,
     minlength:3,
     required: true,
+  },
+  teacherId:{
+    type:String,
   },
   role: {
     type: String,
@@ -17,7 +21,6 @@ export const UserSchema=new mongoose.Schema({
     type: String,
     required: true,
     unique: true,
-    lowercase: true,
     match: [/^\S+@\S+\.\S+$/, 'Invalid email format']
   },
   password:{

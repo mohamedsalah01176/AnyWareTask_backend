@@ -2,6 +2,7 @@ export interface IUserBody{
   _id:string,
   name:string,
   email:string,
+  teacherId?:string,
   password:string,
   role:'student' | 'teacher',
   createdAt:Date
@@ -12,17 +13,19 @@ export interface IUser{
   password:string,
   role:'student' | 'teacher',
   createdAt:Date
+  teacherId?:string,
 }
 
 export interface ILoginUser{
-  emailOrPhone:string, 
+  email:string, 
   password:string
 }
 
 
 
 export interface JwtPayload {
-    _id:string,
+  _id:string,
+  teacherId?:string,
   name:string,
   email:string,
   role:'student' | 'teacher',

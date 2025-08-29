@@ -1,5 +1,6 @@
 import { IQuiz } from "../interface/quiz";
-import { JwtPayload } from "../interface/user";
+import { IUserBody, JwtPayload } from "../interface/user";
+import CourseModel from "../model/course";
 import QuizModel from "../model/quiz";
 import SubmissionModel from "../model/submitionQuiz";
 import { translateToAr } from "../util/quizzes/translateToAr";
@@ -14,10 +15,25 @@ export default class QuizService{
 
   async handleGetAllQuizzes(){
     try{
-      const courses=await QuizModel.find({});
+      const quizzes=await QuizModel.find({});
       return{
           status:"success",
-          courses
+          quizzes
+        }
+    }catch(errors){
+      console.log(errors)
+      return{
+        status:"error",
+        errors
+      }
+    }
+  }
+  async handleGetSpecificQuizz(quizId:string){
+    try{
+      const quiz=await QuizModel.findOne({_id:quizId});
+      return{
+          status:"success",
+          quiz
         }
     }catch(errors){
       console.log(errors)
@@ -43,7 +59,8 @@ export default class QuizService{
     }
   }
 
-  async handleAddQuiz(body: IQuiz,lang:string) {
+  async handleAddQuiz(body: IQuiz,lang:string,user:IUserBody) {
+    console.log(user,"ddddddddd")
     try {
       let translateBody;
       if(lang=== "ar"){
@@ -51,7 +68,23 @@ export default class QuizService{
       }else{
         translateBody=await translateToAr(body)
       }
-      const newQuiz = new QuizModel(translateBody);
+      const foundCourse = await CourseModel.findOne({titleEn:translateBody.titleEn});
+      if(foundCourse){
+        foundCourse.updateOne({$inc:{numberQuiz:1}})
+      }else{
+        const newCourse = new CourseModel({
+          title: translateBody.title,
+          titleEn: translateBody.titleEn,
+          titleAr: translateBody.titleAr || "", 
+          description: translateBody.description,
+          descriptionEn: translateBody.descriptionEn,
+          descriptionAr: translateBody.descriptionAr || "", 
+          numberQuiz: 1,
+          teacherId: user.teacherId,
+        });
+        await newCourse.save();
+      }
+      const newQuiz = new QuizModel({...translateBody,teacherId:user.teacherId});
       await newQuiz.save();
       return {
         status: "success",
@@ -188,6 +221,22 @@ export default class QuizService{
     }
   }
 
+  async handleAllQuizForUsers(teacherId:string){
+    try{
+      console.log("ddddddd")
+      const quizzes=await QuizModel.find({teacherId:teacherId});
+      return{
+        status:"success",
+        quizzes
+      }
+    }catch(errors){
+      console.log(errors)
+      return{
+        status:"error",
+        errors
+      }
+    }
+  }
   async handleDeleteQuiz(qiuzId:string){
     try{
       const quizeDeleted=await QuizModel.deleteOne({_id:qiuzId});
